@@ -17,10 +17,10 @@ public class gameTile implements Drawable {
 	private Texture texture;
 
 	private Sprite sprite;
-	
+
 	private Vector2f position;
 
-	
+
 	public gameTile() {
 		texture = new Texture();
 		try
@@ -33,26 +33,26 @@ public class gameTile implements Drawable {
 		}
 		sprite = new Sprite(texture);
 	}
-	
+
 
 	public void draw(RenderTarget target, RenderStates states) {
 		sprite.draw(target, states);
 	}
 
-	public Vector2f getTilePosition(){
+	public Vector2f getTilePosition() {
 		return position;
 	}
-	
-	public void setPosition(Vector2f pos){
+
+	public void setPosition(Vector2f pos) {
 		position = pos;
 		sprite.setPosition(position);
 	}
-	
-	public Vector2i getTextureSize(){
+
+	public Vector2i getTextureSize() {
 		return texture.getSize();
 	}
-	
-	public Sprite getSprite(){
+
+	public Sprite getSprite() {
 		return sprite;
 	}
 }

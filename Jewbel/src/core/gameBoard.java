@@ -15,38 +15,52 @@ public class gameBoard implements Drawable {
 
 	private gameTile gameBoardSize[][];
 
+	private Jewbel jewbelsOnScreen[][];
+
 	private Window renderWindow;
-	
+
 	public gameBoard(RenderWindow window) {
-		
+
 		gameBoardSize = new gameTile[8][8];
+		jewbelsOnScreen = new Jewbel[gameBoardSize.length][gameBoardSize.length];
 		renderWindow = window;
 
-		for(int i = 0; i< gameBoardSize.length; i++)
-			for(int d = 0; d<gameBoardSize[i].length; d++){
+		for (int i = 0; i < gameBoardSize.length; i++ )
+			for (int d = 0; d < gameBoardSize[i].length; d++ )
+			{
 				gameBoardSize[i][d] = new gameTile();
-				gameBoardSize[i][d].setPosition(new Vector2f(renderWindow.getSize().x/3, renderWindow.getSize().y/6));
-				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(), new Vector2f(i*64, d*64)));
+				gameBoardSize[i][d].setPosition(new Vector2f(renderWindow.getSize().x / 3, renderWindow.getSize().y / 6));
+				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(),
+						new Vector2f(i * 64, d * 64)));
+				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
+				jewbelsOnScreen[i][d].setPosition(gameBoardSize[i][d].getTilePosition());
 			}
 	}
 
 	public void draw(RenderTarget target, RenderStates states) {
-		
+
 		//Goes through every tile on the gameboard and draws it
 		for (gameTile[] horizontalRows : gameBoardSize)
 			for (gameTile verticalRows : horizontalRows)
 				verticalRows.draw(target, states);
-	}
-	
-	public void findJewbelToSelect(Vector2i mousePosition){
 
-		
-		for(gameTile[] selectedTileRow: gameBoardSize)
-			for(gameTile selectedTile: selectedTileRow){
-				if(mousePosition.x >= selectedTile.getSprite().getPosition().x && mousePosition.x <= selectedTile.getSprite().getPosition().x + selectedTile.getTextureSize().x)
-					if(mousePosition.y >= selectedTile.getSprite().getPosition().y && mousePosition.y <= selectedTile.getSprite().getPosition().y + selectedTile.getTextureSize().y)
-						selectedTile.getSprite().setRotation(selectedTile.getSprite().getRotation() + 45f);
+		for (Jewbel[] horizontalJewbels : jewbelsOnScreen)
+			for (Jewbel verticalJewbels : horizontalJewbels)
+				verticalJewbels.draw(target, states);
+	}
+
+	public void findJewbelToSelect(Vector2i mousePosition) {
+
+
+		for (gameTile[] selectedTileRow : gameBoardSize)
+			for (gameTile selectedTile : selectedTileRow)
+			{
+				if (mousePosition.x >= selectedTile.getSprite().getPosition().x
+						&& mousePosition.x <= selectedTile.getSprite().getPosition().x + selectedTile.getTextureSize().x)
+					if (mousePosition.y >= selectedTile.getSprite().getPosition().y
+							&& mousePosition.y <= selectedTile.getSprite().getPosition().y + selectedTile.getTextureSize().y);
+						//selectedTile.getSprite().setRotation(selectedTile.getSprite().getRotation() + 45f);
 			}
 	}
-	
+
 }

@@ -12,11 +12,11 @@ import org.jsfml.window.event.Event;
 public class Driver {
 
 	private static gameBoard gameBoard;
-	
+
 	private static RenderWindow renderWindow;
 
 	//private static Clock FPS;
-	
+
 	public static void main(String args[]) {
 		gameSetup();
 	}
@@ -24,9 +24,9 @@ public class Driver {
 	public static void gameSetup() {
 
 		renderWindow = new RenderWindow();
-		renderWindow.create(new VideoMode(1280,720).getDesktopMode().getDesktopMode(), "Bejewbled");
+		renderWindow.create(new VideoMode(1280, 720).getDesktopMode().getDesktopMode(), "Bejewbled");
 		renderWindow.setFramerateLimit(60);
-		
+
 		gameBoard = new gameBoard(renderWindow);
 
 		while (renderWindow.isOpen())
@@ -36,24 +36,24 @@ public class Driver {
 			drawWindow();
 		}
 	}
-	
-	public static void update(){
-		
+
+	public static void update() {
+
 	}
-	
+
 	public static void handleInput() {
 		for (Event event : renderWindow.pollEvents())
 		{
 			if (event.type == Event.Type.CLOSED)
 				renderWindow.close();
-			
-			else if(event.type == Event.Type.MOUSE_BUTTON_PRESSED)
+
+			else if (event.type == Event.Type.MOUSE_BUTTON_PRESSED)
 				gameBoard.findJewbelToSelect(event.asMouseEvent().position);
 		}
 	}
-	
+
 	public static void drawWindow() {
-	  renderWindow.clear();
+		renderWindow.clear();
 		renderWindow.draw(gameBoard);
 		renderWindow.display();
 	}
