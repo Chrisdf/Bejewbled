@@ -4,10 +4,13 @@ import org.jsfml.graphics.ConstView;
 import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.View;
+import org.jsfml.system.Clock;
 import org.jsfml.system.Vector2f;
 import org.jsfml.window.VideoMode;
 import org.jsfml.window.Window;
 import org.jsfml.window.event.Event;
+
+import ui_elements.FPS_Counter;
 
 public class Driver {
 
@@ -15,7 +18,9 @@ public class Driver {
 
 	private static RenderWindow renderWindow;
 
-	//private static Clock FPS;
+	private static Clock gameClock;
+	
+	private static FPS_Counter fpsCounter;
 
 	public static void main(String args[]) {
 		gameSetup();
@@ -24,11 +29,13 @@ public class Driver {
 	public static void gameSetup() {
 
 		renderWindow = new RenderWindow();
-		renderWindow.create(new VideoMode(1280, 720).getDesktopMode().getDesktopMode(), "Bejewbled");
+		renderWindow.create(new VideoMode(1280, 720).getDesktopMode(), "Bejewbled");
 		renderWindow.setFramerateLimit(60);
 
 		gameBoard = new gameBoard(renderWindow);
-
+		gameClock = new Clock();
+		fpsCounter = new FPS_Counter(gameClock);
+		
 		while (renderWindow.isOpen())
 		{
 			update();
@@ -38,7 +45,7 @@ public class Driver {
 	}
 
 	public static void update() {
-
+		
 	}
 
 	public static void handleInput() {

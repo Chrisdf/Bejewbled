@@ -80,16 +80,16 @@ public class Jewbel implements Drawable {
 			switch (color)
 			{
 				case 1:
-					jewbelTexture.loadFromFile(Paths.get("Resources/redJewel.jpg"));
+					jewbelTexture.loadFromFile(Paths.get("Resources/redJewel.png"));
 					break;
 				case 2:
-					jewbelTexture.loadFromFile(Paths.get("Resources/yellowJewel.jpg"));
+					jewbelTexture.loadFromFile(Paths.get("Resources/yellowJewel.png"));
 					break;
 				case 3:
-					jewbelTexture.loadFromFile(Paths.get("Resources/purpleJewel.jpg"));
+					jewbelTexture.loadFromFile(Paths.get("Resources/purpleJewel.png"));
 					break;
 				case 4:
-					jewbelTexture.loadFromFile(Paths.get("Resources/blueJewel.jpg"));
+					jewbelTexture.loadFromFile(Paths.get("Resources/blueJewel.png"));
 					break;
 				//default:
 					//jewbelTexture.loadFromFile(Paths.get("Resources/yellowJewel.png"));
