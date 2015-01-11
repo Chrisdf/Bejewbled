@@ -3,12 +3,15 @@ package core;
 import java.io.IOException;
 
 import org.jsfml.graphics.Drawable;
+import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.Window;
+
+import ui_elements.JewbelSelect;
 
 
 public class gameBoard implements Drawable {
@@ -18,12 +21,15 @@ public class gameBoard implements Drawable {
 	private Jewbel jewbelsOnScreen[][];
 
 	private Window renderWindow;
+	
+	private JewbelSelect selectionBox;
 
 	public gameBoard(RenderWindow window) {
 
 		gameBoardSize = new gameTile[8][8];
 		jewbelsOnScreen = new Jewbel[gameBoardSize.length][gameBoardSize.length];
 		renderWindow = window;
+		selectionBox = new JewbelSelect();
 
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
@@ -43,23 +49,29 @@ public class gameBoard implements Drawable {
 		for (gameTile[] horizontalRows : gameBoardSize)
 			for (gameTile verticalRows : horizontalRows)
 				verticalRows.draw(target, states);
+		
+		selectionBox.draw(target, states);
 
 		for (Jewbel[] horizontalJewbels : jewbelsOnScreen)
 			for (Jewbel verticalJewbels : horizontalJewbels)
 				verticalJewbels.draw(target, states);
+		
 	}
 
 	public void findJewbelToSelect(Vector2i mousePosition) {
 
 
-		for (gameTile[] selectedTileRow : gameBoardSize)
-			for (gameTile selectedTile : selectedTileRow)
+		for (int i = 0; i<gameBoardSize.length; i++)
+			for (int d = 0; d<gameBoardSize[i].length; d++)
 			{
-				if (mousePosition.x >= selectedTile.getSprite().getPosition().x
-						&& mousePosition.x <= selectedTile.getSprite().getPosition().x + selectedTile.getTextureSize().x)
-					if (mousePosition.y >= selectedTile.getSprite().getPosition().y
-							&& mousePosition.y <= selectedTile.getSprite().getPosition().y + selectedTile.getTextureSize().y);
-						//selectedTile.getSprite().setRotation(selectedTile.getSprite().getRotation() + 45f);
+				if (mousePosition.x >= gameBoardSize[i][d].getSprite().getPosition().x
+						&& mousePosition.x <= gameBoardSize[i][d].getSprite().getPosition().x + gameBoardSize[i][d].getTextureSize().x)
+					if (mousePosition.y >= gameBoardSize[i][d].getSprite().getPosition().y
+							&& mousePosition.y <= gameBoardSize[i][d].getSprite().getPosition().y + gameBoardSize[i][d].getTextureSize().y){
+						Vector2f jewbelPosition = gameBoardSize[i][d].getTilePosition();
+						selectionBox = new JewbelSelect(jewbelPosition);
+			
+					}
 			}
 	}
 

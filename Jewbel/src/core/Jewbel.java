@@ -31,9 +31,8 @@ public class Jewbel implements Drawable {
 
 	public Jewbel(Vector2i gameBoardPosition, int jewbelType) {
 
+		this(gameBoardPosition);
 		color = jewbelType;
-		boardPosition = gameBoardPosition;
-		initSprite(color);
 	}
 
 	public Vector2i getAboveJewbel() {
@@ -70,7 +69,8 @@ public class Jewbel implements Drawable {
 
 	public void setPosition(Vector2f tilePosition) {
 
-		jewbelSprite.setPosition(Vector2f.add(tilePosition, new Vector2f(jewbelTexture.getSize().x/8, jewbelTexture.getSize().y/8)));
+		jewbelSprite.setPosition(Vector2f.add(tilePosition,
+				new Vector2f(jewbelTexture.getSize().x / 8, jewbelTexture.getSize().y / 8)));
 	}
 
 	public void initSprite(int color) {
@@ -91,8 +91,6 @@ public class Jewbel implements Drawable {
 				case 4:
 					jewbelTexture.loadFromFile(Paths.get("Resources/blueJewel.png"));
 					break;
-				//default:
-					//jewbelTexture.loadFromFile(Paths.get("Resources/yellowJewel.png"));
 			}
 
 		}
@@ -106,5 +104,10 @@ public class Jewbel implements Drawable {
 	public void draw(RenderTarget target, RenderStates states) {
 
 		jewbelSprite.draw(target, states);
+	}
+	
+	public Sprite getSprite(){
+		
+		return jewbelSprite;
 	}
 }
