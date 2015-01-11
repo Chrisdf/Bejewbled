@@ -45,7 +45,7 @@ public class Driver {
 	}
 
 	public static void update() {
-		
+		fpsCounter.calcFPS();
 	}
 
 	public static void handleInput() {
@@ -62,6 +62,7 @@ public class Driver {
 	public static void drawWindow() {
 		renderWindow.clear();
 		renderWindow.draw(gameBoard);
+		renderWindow.draw(fpsCounter);
 		renderWindow.display();
 	}
 }
