@@ -20,7 +20,7 @@ public class JewbelSelect implements Drawable {
 		
 		try
 		{
-			selectionTexture.loadFromFile(Paths.get("Resources/selectionTexture.jpg"));
+			selectionTexture.loadFromFile(Paths.get("Resources/selectTexture.jpg"));
 		}
 		catch(Exception e)
 		{
