@@ -36,8 +36,7 @@ public class gameBoard implements Drawable {
 			{
 				gameBoardSize[i][d] = new gameTile();
 				gameBoardSize[i][d].setPosition(new Vector2f(renderWindow.getSize().x / 3, renderWindow.getSize().y / 6));
-				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(),
-						new Vector2f(i * 64, d * 64)));
+				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(), new Vector2f(i * 64, d * 64)));
 				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
 				jewbelsOnScreen[i][d].setPosition(gameBoardSize[i][d].getTilePosition());
 			}
@@ -64,15 +63,38 @@ public class gameBoard implements Drawable {
 		for (int i = 0; i<gameBoardSize.length; i++)
 			for (int d = 0; d<gameBoardSize[i].length; d++)
 			{
-				if (mousePosition.x >= gameBoardSize[i][d].getSprite().getPosition().x
-						&& mousePosition.x <= gameBoardSize[i][d].getSprite().getPosition().x + gameBoardSize[i][d].getTextureSize().x)
-					if (mousePosition.y >= gameBoardSize[i][d].getSprite().getPosition().y
-							&& mousePosition.y <= gameBoardSize[i][d].getSprite().getPosition().y + gameBoardSize[i][d].getTextureSize().y){
+				if(!selectionBox.getIfJewbelSelected())
+				{
+					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
+					{
 						Vector2f jewbelPosition = gameBoardSize[i][d].getTilePosition();
-						selectionBox = new JewbelSelect(jewbelPosition);
-			
+						selectionBox = new JewbelSelect(jewbelPosition, new Vector2i(i, d));
+						selectionBox.setJewbelSelect(true);
 					}
+				}
+				else if(selectionBox.getIfJewbelSelected())
+				{
+					if(mouseOnGameTile(gameBoardSize[i][d], mousePosition))
+					{
+						Jewbel temp = jewbelsOnScreen[i][d];
+						jewbelsOnScreen[i][d] = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
+						jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = temp;
+						selectionBox.setJewbelSelect(false);
+						selectionBox = new JewbelSelect();
+					}
+				}
 			}
 	}
-
+	
+	public boolean mouseOnGameTile(gameTile gameTile, Vector2i mousePosition){
+		
+		if(mousePosition.x >= gameTile.getSprite().getPosition().x 
+				&& mousePosition.x <= gameTile.getSprite().getPosition().x + gameTile.getTextureSize().x)
+			if (mousePosition.y >= gameTile.getSprite().getPosition().y 
+				&& mousePosition.y <= gameTile.getSprite().getPosition().y + gameTile.getTextureSize().y)
+				return true;
+		
+		return false;
+		
+	}
 }

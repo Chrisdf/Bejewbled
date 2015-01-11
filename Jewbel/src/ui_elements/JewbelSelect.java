@@ -8,6 +8,7 @@ import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2f;
+import org.jsfml.system.Vector2i;
 
 
 public class JewbelSelect implements Drawable {
@@ -15,6 +16,10 @@ public class JewbelSelect implements Drawable {
 	private Texture selectionTexture = new Texture();
 	
 	private Sprite selectionSprite = new Sprite();
+	
+	private boolean jewbelSelected = false;
+	
+	Vector2i selectedJewbelIndex;
 	
 	public JewbelSelect(){
 		
@@ -30,9 +35,10 @@ public class JewbelSelect implements Drawable {
 		selectionSprite.setPosition(new Vector2f(-100, -100));
 	}
 	
-	public JewbelSelect(Vector2f position){
+	public JewbelSelect(Vector2f position, Vector2i jewbelBoardIndex){
 		
 		this();
+		selectedJewbelIndex = jewbelBoardIndex;
 		selectionSprite.setPosition(position);
 	}
 	
@@ -44,5 +50,20 @@ public class JewbelSelect implements Drawable {
 	public void draw(RenderTarget target, RenderStates states) {
 	
 		selectionSprite.draw(target, states);
+	}
+	
+	public void setJewbelSelect(boolean ifSelected){
+		
+		jewbelSelected = ifSelected;
+	}
+	
+	public boolean getIfJewbelSelected(){
+		
+		return jewbelSelected;
+	}
+	
+	public Vector2i getSelectedJewbelIndex(){
+		
+		return selectedJewbelIndex;
 	}
 }
