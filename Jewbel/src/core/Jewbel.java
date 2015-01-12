@@ -67,10 +67,15 @@ public class Jewbel implements Drawable {
 			return new Vector2i(boardPosition.x + 1, boardPosition.y);
 	}
 
-	public void setPosition(Vector2f tilePosition) {
+	public void setInitialPosition(Vector2f tilePosition) {
 
 		jewbelSprite.setPosition(Vector2f.add(tilePosition,
 				new Vector2f(jewbelTexture.getSize().x / 8, jewbelTexture.getSize().y / 8)));
+	}
+	
+	public void setPosition(Vector2f jewbelPosition){
+		
+		jewbelSprite.setPosition(jewbelPosition);
 	}
 
 	public void initSprite(int color) {

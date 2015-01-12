@@ -12,6 +12,7 @@ import org.jsfml.window.event.Event;
 
 import ui_elements.Background;
 import ui_elements.FPS_Counter;
+import ui_elements.GameTitle;
 
 public class Driver {
 
@@ -24,6 +25,8 @@ public class Driver {
 	private static FPS_Counter fpsCounter;
 	
 	private static Background background;
+	
+	private static GameTitle gameTitle;
 
 	public static void main(String args[]) {
 		gameSetup();
@@ -36,6 +39,7 @@ public class Driver {
 		renderWindow.setFramerateLimit(60);
 
 		background = new Background(renderWindow);
+		gameTitle = new GameTitle(renderWindow);
 		gameBoard = new gameBoard(renderWindow);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
@@ -66,6 +70,7 @@ public class Driver {
 	public static void drawWindow() {
 		renderWindow.clear();
 		renderWindow.draw(background);
+		renderWindow.draw(gameTitle);
 		renderWindow.draw(gameBoard);
 		renderWindow.draw(fpsCounter);
 		renderWindow.display();

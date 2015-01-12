@@ -38,7 +38,7 @@ public class gameBoard implements Drawable {
 				gameBoardSize[i][d].setPosition(new Vector2f(renderWindow.getSize().x / 3, renderWindow.getSize().y / 6));
 				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(), new Vector2f(i * 64, d * 64)));
 				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
-				jewbelsOnScreen[i][d].setPosition(gameBoardSize[i][d].getTilePosition());
+				jewbelsOnScreen[i][d].setInitialPosition(gameBoardSize[i][d].getTilePosition());
 			}
 	}
 
@@ -63,8 +63,9 @@ public class gameBoard implements Drawable {
 		for (int i = 0; i<gameBoardSize.length; i++)
 			for (int d = 0; d<gameBoardSize[i].length; d++)
 			{
-				if(!selectionBox.getIfJewbelSelected())
-				{
+				if (!selectionBox.getIfJewbelSelected())
+				{	
+					//First click on game board if a jewbel has not been selected already
 					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
 					{
 						Vector2f jewbelPosition = gameBoardSize[i][d].getTilePosition();
@@ -72,13 +73,18 @@ public class gameBoard implements Drawable {
 						selectionBox.setJewbelSelect(true);
 					}
 				}
-				else if(selectionBox.getIfJewbelSelected())
+				else if (selectionBox.getIfJewbelSelected())
 				{
-					if(mouseOnGameTile(gameBoardSize[i][d], mousePosition))
+					//The two selected jewbels have been swapped
+					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
 					{
-						Jewbel temp = jewbelsOnScreen[i][d];
-						jewbelsOnScreen[i][d] = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
-						jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = temp;
+						Jewbel firstJewbel = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
+						Jewbel secondJewbel = jewbelsOnScreen[i][d];
+						Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
+						Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
+						firstJewbel.setPosition(secondJewbelPosition);
+						secondJewbel.setPosition(firstJewbelPosition);
+						
 						selectionBox.setJewbelSelect(false);
 						selectionBox = new JewbelSelect();
 					}
