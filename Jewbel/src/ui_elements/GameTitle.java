@@ -22,7 +22,7 @@ public class GameTitle implements Drawable{
 
 		try
 		{
-			freeSans.loadFromFile(Paths.get("Resources/freeSans.otf"));
+			freeSans.loadFromFile(Paths.get("Resources/FreeSans.otf"));
 		}
 		catch (Exception e)
 		{

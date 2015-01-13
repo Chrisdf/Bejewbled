@@ -13,8 +13,10 @@ import org.jsfml.system.Vector2i;
 
 
 public class Jewbel implements Drawable {
-
-	private int color;
+	
+	private enum Color {BLUE, PURPLE, RED, YELLOW};
+	
+	private Color assignedColor;
 
 	private Vector2i boardPosition;
 
@@ -24,15 +26,40 @@ public class Jewbel implements Drawable {
 
 	public Jewbel(Vector2i gameBoardPosition) {
 
-		color = (int) (Math.random() * 4 + 1);
+		int randomColor = (int) (Math.random() * 4 + 1);
+		
+		switch (randomColor)
+		{
+			case 1:
+				assignedColor = Color.RED;
+				break;
+			case 2:
+				assignedColor = Color.YELLOW;
+				break;
+			case 3:
+				assignedColor = Color.PURPLE;
+				break;
+			case 4:
+				assignedColor = Color.BLUE;
+				break;
+		}
+		
 		boardPosition = gameBoardPosition;
-		initSprite(color);
+		initSprite();
 	}
 
-	public Jewbel(Vector2i gameBoardPosition, int jewbelType) {
+	public Jewbel(Vector2i gameBoardPosition, Color jewbelColor) {
 
 		this(gameBoardPosition);
-		color = jewbelType;
+		assignedColor = jewbelColor;
+	}
+	
+	public void swapJewbel(Jewbel oneToSwap) {
+		
+		Vector2f firstJewbelPosition = getSprite().getPosition();
+		Vector2f secondJewbelPosition = oneToSwap.getSprite().getPosition();
+		setPosition(secondJewbelPosition);
+		oneToSwap.setPosition(firstJewbelPosition);
 	}
 
 	public Vector2i getAboveJewbel() {
@@ -78,22 +105,22 @@ public class Jewbel implements Drawable {
 		jewbelSprite.setPosition(jewbelPosition);
 	}
 
-	public void initSprite(int color) {
+	public void initSprite() {
 		jewbelTexture = new Texture();
 		try
 		{
-			switch (color)
+			switch (assignedColor)
 			{
-				case 1:
+				case RED:
 					jewbelTexture.loadFromFile(Paths.get("Resources/redJewel.png"));
 					break;
-				case 2:
+				case YELLOW:
 					jewbelTexture.loadFromFile(Paths.get("Resources/yellowJewel.png"));
 					break;
-				case 3:
+				case PURPLE:
 					jewbelTexture.loadFromFile(Paths.get("Resources/purpleJewel.png"));
 					break;
-				case 4:
+				case BLUE:
 					jewbelTexture.loadFromFile(Paths.get("Resources/blueJewel.png"));
 					break;
 			}

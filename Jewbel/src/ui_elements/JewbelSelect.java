@@ -66,4 +66,9 @@ public class JewbelSelect implements Drawable {
 		
 		return selectedJewbelIndex;
 	}
+	
+	public void setSelectedJewbelIndex(Vector2i index){
+		
+		selectedJewbelIndex = index;
+	}
 }

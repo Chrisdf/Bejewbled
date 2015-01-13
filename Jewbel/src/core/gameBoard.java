@@ -75,15 +75,13 @@ public class gameBoard implements Drawable {
 				}
 				else if (selectionBox.getIfJewbelSelected())
 				{
-					//The two selected jewbels have been swapped
+					//The two selected jewbels swap
 					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
 					{
 						Jewbel firstJewbel = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
 						Jewbel secondJewbel = jewbelsOnScreen[i][d];
-						Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
-						Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
-						firstJewbel.setPosition(secondJewbelPosition);
-						secondJewbel.setPosition(firstJewbelPosition);
+						firstJewbel.swapJewbel(secondJewbel);
+						selectionBox.setSelectedJewbelIndex(new Vector2i(i,d));
 						
 						selectionBox.setJewbelSelect(false);
 						selectionBox = new JewbelSelect();
