@@ -84,6 +84,9 @@ public class gameBoard implements Drawable {
 						Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
 						firstJewbel.setPosition(secondJewbelPosition);
 						secondJewbel.setPosition(firstJewbelPosition);
+						// SWAP SPRITES AND POSITION IN GAMEBOARD
+						jewbelsOnScreen[i][d] = firstJewbel;
+						jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = secondJewbel;
 						
 						selectionBox.setJewbelSelect(false);
 						selectionBox = new JewbelSelect();
