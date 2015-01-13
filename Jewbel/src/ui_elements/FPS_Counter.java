@@ -30,6 +30,8 @@ public class FPS_Counter implements Drawable{
 		
 		fpsClock = gameClock;
 		
+		int frameCount = 0;
+		
 		freeSans = new Font();
 		try
 		{

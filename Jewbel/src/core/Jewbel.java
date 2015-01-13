@@ -53,14 +53,6 @@ public class Jewbel implements Drawable {
 		this(gameBoardPosition);
 		assignedColor = jewbelColor;
 	}
-	
-	public void swapJewbel(Jewbel oneToSwap) {
-		
-		Vector2f firstJewbelPosition = getSprite().getPosition();
-		Vector2f secondJewbelPosition = oneToSwap.getSprite().getPosition();
-		setPosition(secondJewbelPosition);
-		oneToSwap.setPosition(firstJewbelPosition);
-	}
 
 	public Vector2i getAboveJewbel() {
 
@@ -132,14 +124,22 @@ public class Jewbel implements Drawable {
 		}
 		jewbelSprite = new Sprite(jewbelTexture);
 	}
-
-	public void draw(RenderTarget target, RenderStates states) {
-
-		jewbelSprite.draw(target, states);
+	
+	public Vector2i getBoardIndex(){
+		
+		return boardPosition;
 	}
 	
 	public Sprite getSprite(){
 		
 		return jewbelSprite;
 	}
+
+	public void draw(RenderTarget target, RenderStates states) {
+
+		jewbelSprite.draw(target, states);
+	}
+	
+
+	
 }

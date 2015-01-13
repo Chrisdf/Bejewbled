@@ -1,9 +1,6 @@
 package core;
 
-import java.io.IOException;
-
 import org.jsfml.graphics.Drawable;
-import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 import org.jsfml.graphics.RenderWindow;
@@ -14,9 +11,9 @@ import org.jsfml.window.Window;
 import ui_elements.JewbelSelect;
 
 
-public class gameBoard implements Drawable {
+public class GameBoard implements Drawable {
 
-	private gameTile gameBoardSize[][];
+	private GameTile gameBoardSize[][];
 
 	private Jewbel jewbelsOnScreen[][];
 
@@ -24,9 +21,9 @@ public class gameBoard implements Drawable {
 	
 	private JewbelSelect selectionBox;
 
-	public gameBoard(RenderWindow window) {
+	public GameBoard(RenderWindow window) {
 
-		gameBoardSize = new gameTile[8][8];
+		gameBoardSize = new GameTile[8][8];
 		jewbelsOnScreen = new Jewbel[gameBoardSize.length][gameBoardSize.length];
 		renderWindow = window;
 		selectionBox = new JewbelSelect();
@@ -34,7 +31,7 @@ public class gameBoard implements Drawable {
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
 			{
-				gameBoardSize[i][d] = new gameTile();
+				gameBoardSize[i][d] = new GameTile();
 				gameBoardSize[i][d].setPosition(new Vector2f(renderWindow.getSize().x / 3, renderWindow.getSize().y / 6));
 				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(), new Vector2f(i * 64, d * 64)));
 				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
@@ -45,8 +42,8 @@ public class gameBoard implements Drawable {
 	public void draw(RenderTarget target, RenderStates states) {
 
 		//Goes through every tile on the gameboard and draws it
-		for (gameTile[] horizontalRows : gameBoardSize)
-			for (gameTile verticalRows : horizontalRows)
+		for (GameTile[] horizontalRows : gameBoardSize)
+			for (GameTile verticalRows : horizontalRows)
 				verticalRows.draw(target, states);
 		
 		selectionBox.draw(target, states);
@@ -80,8 +77,14 @@ public class gameBoard implements Drawable {
 					{
 						Jewbel firstJewbel = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
 						Jewbel secondJewbel = jewbelsOnScreen[i][d];
-						firstJewbel.swapJewbel(secondJewbel);
-						selectionBox.setSelectedJewbelIndex(new Vector2i(i,d));
+						Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
+						Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
+						
+						firstJewbel.setPosition(secondJewbelPosition);
+ 						secondJewbel.setPosition(firstJewbelPosition);
+						jewbelsOnScreen[i][d] = firstJewbel;
+						jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = secondJewbel;
+
 						
 						selectionBox.setJewbelSelect(false);
 						selectionBox = new JewbelSelect();
@@ -90,7 +93,7 @@ public class gameBoard implements Drawable {
 			}
 	}
 	
-	public boolean mouseOnGameTile(gameTile gameTile, Vector2i mousePosition){
+	public boolean mouseOnGameTile(GameTile gameTile, Vector2i mousePosition){
 		
 		if(mousePosition.x >= gameTile.getSprite().getPosition().x 
 				&& mousePosition.x <= gameTile.getSprite().getPosition().x + gameTile.getTextureSize().x)

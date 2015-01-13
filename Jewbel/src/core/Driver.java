@@ -1,13 +1,8 @@
 package core;
 
-import org.jsfml.graphics.ConstView;
-import org.jsfml.graphics.RectangleShape;
 import org.jsfml.graphics.RenderWindow;
-import org.jsfml.graphics.View;
 import org.jsfml.system.Clock;
-import org.jsfml.system.Vector2f;
 import org.jsfml.window.VideoMode;
-import org.jsfml.window.Window;
 import org.jsfml.window.event.Event;
 
 import ui_elements.Background;
@@ -16,7 +11,7 @@ import ui_elements.GameTitle;
 
 public class Driver {
 
-	private static gameBoard gameBoard;
+	private static GameBoard gameBoard;
 
 	private static RenderWindow renderWindow;
 
@@ -35,12 +30,13 @@ public class Driver {
 	public static void gameSetup() {
 
 		renderWindow = new RenderWindow();
-		renderWindow.create(new VideoMode(1280, 720).getDesktopMode(), "Bejewbled");
+		new VideoMode(1280, 720);
+		renderWindow.create(VideoMode.getDesktopMode(), "Bejewbled");
 		renderWindow.setFramerateLimit(60);
 
 		background = new Background(renderWindow);
 		gameTitle = new GameTitle(renderWindow);
-		gameBoard = new gameBoard(renderWindow);
+		gameBoard = new GameBoard(renderWindow);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
 		

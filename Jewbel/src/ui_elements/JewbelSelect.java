@@ -19,7 +19,7 @@ public class JewbelSelect implements Drawable {
 	
 	private boolean jewbelSelected = false;
 	
-	Vector2i selectedJewbelIndex;
+	private Vector2i selectedJewbelIndex;
 	
 	public JewbelSelect(){
 		
@@ -42,7 +42,7 @@ public class JewbelSelect implements Drawable {
 		selectionSprite.setPosition(position);
 	}
 	
-	private void setPosition(Vector2f position){
+	public void setPosition(Vector2f position){
 		
 		selectionSprite.setPosition(position);
 	}

@@ -12,7 +12,7 @@ import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 
 
-public class gameTile implements Drawable {
+public class GameTile implements Drawable {
 
 	private Texture texture;
 
@@ -21,7 +21,7 @@ public class gameTile implements Drawable {
 	private Vector2f position;
 
 
-	public gameTile() {
+	public GameTile() {
 		texture = new Texture();
 		try
 		{
