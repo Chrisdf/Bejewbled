@@ -77,17 +77,11 @@ public class GameBoard implements Drawable {
 					{
 						Jewbel firstJewbel = jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
 						Jewbel secondJewbel = jewbelsOnScreen[i][d];
-						Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
-						Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
 						
-						firstJewbel.setPosition(secondJewbelPosition);
- 						secondJewbel.setPosition(firstJewbelPosition);
-						jewbelsOnScreen[i][d] = firstJewbel;
-						jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = secondJewbel;
-
-						
-						selectionBox.setJewbelSelect(false);
-						selectionBox = new JewbelSelect();
+						if(firstJewbel.getIfAdjacent(secondJewbel))
+						{
+							swapJewbels(firstJewbel, secondJewbel, i, d);
+						}
 					}
 				}
 			}
@@ -103,5 +97,22 @@ public class GameBoard implements Drawable {
 		
 		return false;
 		
+	}
+	
+	public void swapJewbels(Jewbel firstJewbel, Jewbel secondJewbel, int jewbelBoardPositionX, int jewbelBoardPositionY){
+		
+		Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
+		Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
+		
+		firstJewbel.setPosition(secondJewbelPosition);
+		secondJewbel.setPosition(firstJewbelPosition);
+		Vector2i firstJewbelBoardIndex = firstJewbel.getBoardIndex();
+		firstJewbel.setBoardPosition(secondJewbel.getBoardIndex());
+		secondJewbel.setBoardPosition(firstJewbelBoardIndex);
+		jewbelsOnScreen[jewbelBoardPositionX][jewbelBoardPositionY] = firstJewbel;
+		jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y] = secondJewbel;
+		
+		selectionBox.setJewbelSelect(false);
+		selectionBox = new JewbelSelect();
 	}
 }

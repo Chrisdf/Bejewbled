@@ -53,6 +53,20 @@ public class Jewbel implements Drawable {
 		this(gameBoardPosition);
 		assignedColor = jewbelColor;
 	}
+	
+	public boolean getIfAdjacent(Jewbel secondJewbel){
+		
+		int xDistance = Math.abs(boardPosition.x - secondJewbel.getBoardIndex().x);
+		int yDistance = Math.abs(boardPosition.y - secondJewbel.getBoardIndex().y);
+		
+		System.out.println((xDistance == 1 && yDistance < 1) && !(xDistance < 1 && yDistance == 1));
+		System.out.println((yDistance == 1 && xDistance < 1) && !(yDistance < 1 && xDistance == 1));
+		
+		if((xDistance == 1 && yDistance == 0) || (yDistance == 1 && xDistance == 0))
+			return true;
+		else
+			return false;
+	}
 
 	public Vector2i getAboveJewbel() {
 
@@ -95,6 +109,16 @@ public class Jewbel implements Drawable {
 	public void setPosition(Vector2f jewbelPosition){
 		
 		jewbelSprite.setPosition(jewbelPosition);
+	}
+	
+	public Vector2i getBoardPosition(){
+		
+		return boardPosition;
+	}
+	
+	public void setBoardPosition(Vector2i jewbelIndex){
+		
+		boardPosition = jewbelIndex;
 	}
 
 	public void initSprite() {
