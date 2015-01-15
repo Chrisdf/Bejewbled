@@ -81,6 +81,10 @@ public class GameBoard implements Drawable {
 						if(firstJewbel.getIfAdjacent(secondJewbel))
 						{
 							swapJewbels(firstJewbel, secondJewbel, i, d);
+						} else if (firstJewbel.equals(secondJewbel)) {
+							// deselection
+							selectionBox.setJewbelSelect(false);
+							selectionBox = new JewbelSelect();
 						}
 					}
 				}
