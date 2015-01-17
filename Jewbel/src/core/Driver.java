@@ -30,7 +30,6 @@ public class Driver {
 	public static void gameSetup() {
 
 		renderWindow = new RenderWindow();
-		new VideoMode(1280, 720);
 		renderWindow.create(VideoMode.getDesktopMode(), "Bejewbled");
 		renderWindow.setFramerateLimit(60);
 

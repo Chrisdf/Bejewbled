@@ -14,7 +14,7 @@ import org.jsfml.system.Vector2i;
 
 public class Jewbel implements Drawable {
 	
-	private enum Color {BLUE, PURPLE, RED, YELLOW};
+	public enum Color {BLUE, PURPLE, RED, YELLOW};
 	
 	private Color assignedColor;
 
@@ -23,6 +23,8 @@ public class Jewbel implements Drawable {
 	private Texture jewbelTexture;
 
 	private Sprite jewbelSprite;
+	
+	public boolean passedBy = false;
 
 	public Jewbel(Vector2i gameBoardPosition) {
 
@@ -58,10 +60,7 @@ public class Jewbel implements Drawable {
 		
 		int xDistance = Math.abs(boardPosition.x - secondJewbel.getBoardIndex().x);
 		int yDistance = Math.abs(boardPosition.y - secondJewbel.getBoardIndex().y);
-		
-		System.out.println((xDistance == 1 && yDistance < 1) && !(xDistance < 1 && yDistance == 1));
-		System.out.println((yDistance == 1 && xDistance < 1) && !(yDistance < 1 && xDistance == 1));
-		
+
 		if((xDistance == 1 && yDistance == 0) || (yDistance == 1 && xDistance == 0))
 			return true;
 		else
@@ -111,12 +110,12 @@ public class Jewbel implements Drawable {
 		jewbelSprite.setPosition(jewbelPosition);
 	}
 	
-	public Vector2i getBoardPosition(){
+	public Vector2i getBoardIndex(){
 		
 		return boardPosition;
 	}
 	
-	public void setBoardPosition(Vector2i jewbelIndex){
+	public void setBoardIndex(Vector2i jewbelIndex){
 		
 		boardPosition = jewbelIndex;
 	}
@@ -149,21 +148,19 @@ public class Jewbel implements Drawable {
 		jewbelSprite = new Sprite(jewbelTexture);
 	}
 	
-	public Vector2i getBoardIndex(){
-		
-		return boardPosition;
-	}
-	
 	public Sprite getSprite(){
 		
 		return jewbelSprite;
+	}
+	
+	public Color getColor(){
+		
+		return assignedColor;
 	}
 
 	public void draw(RenderTarget target, RenderStates states) {
 
 		jewbelSprite.draw(target, states);
 	}
-	
-
 	
 }
