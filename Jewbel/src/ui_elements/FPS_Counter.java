@@ -16,22 +16,16 @@ import org.jsfml.system.Vector2f;
 
 public class FPS_Counter implements Drawable {
 
-	private Clock fpsClock;
-
-	private int frameCount;
-
-	private float elapsedTime;
-
 	private Text fpsElement;
 
 	private Font freeSans;
+	
+	private float elapsed;
+	private int framesDrawn;
 
-	public FPS_Counter(Clock gameClock) {
-
-		fpsClock = gameClock;
-
-		int frameCount = 0;
-
+	public FPS_Counter() {
+		elapsed = 0f;
+		framesDrawn = 0;
 		freeSans = new Font();
 		try
 		{
@@ -42,21 +36,23 @@ public class FPS_Counter implements Drawable {
 			e.printStackTrace();
 		}
 
-		fpsElement = new Text(frameCount + "", freeSans, 24);
+		fpsElement = new Text("", freeSans, 24);
 		fpsElement.setColor(Color.YELLOW);
+	}
+	
+	public void addElapsed(float elapsed) {
+		this.elapsed += elapsed;
 	}
 
 	public void calcFPS() {
-
-		frameCount++ ;
-		elapsedTime = fpsClock.getElapsedTime().asSeconds();
-
-		if (elapsedTime >= 1)
+		framesDrawn++;
+		System.out.println(elapsed);
+		if (elapsed >= 1.0f)
 		{
-			fpsElement = new Text((int) (frameCount / elapsedTime) + "", freeSans, 24);
-			fpsElement.setColor(Color.YELLOW);
-			fpsClock.restart();
-			frameCount = 0;
+			System.out.println(true);
+			fpsElement.setString((int) (framesDrawn / elapsed) + "");
+			elapsed = 0f;
+			framesDrawn = 0;
 		}
 	}
 
