@@ -21,7 +21,7 @@ import util.AnimatedSprite;
 public class Jewbel implements Drawable {
 
 	public enum Color {
-		BLUE, PURPLE, RED, YELLOW
+		BLUE, PURPLE, RED, YELLOW, ORANGE, GREEN
 	};
 	
 	private int gameBoardSize;
@@ -40,7 +40,7 @@ public class Jewbel implements Drawable {
 
 		this.gameBoardSize = gameBoardSize;
 		
-		int randomColor = (int) (Math.random() * 4 + 1);
+		int randomColor = (int) (Math.random() * 6 + 1);
 
 		switch (randomColor)
 		{
@@ -55,6 +55,12 @@ public class Jewbel implements Drawable {
 				break;
 			case 4:
 				assignedColor = Color.BLUE;
+				break;
+			case 5:
+				assignedColor = Color.ORANGE;
+				break;
+			case 6:
+				assignedColor = Color.GREEN;
 				break;
 		}
 
@@ -150,6 +156,12 @@ public class Jewbel implements Drawable {
 					break;
 				case BLUE:
 					jewbelTexture.loadFromFile(Paths.get("Resources/blueJewel.png"));
+					break;
+				case GREEN:
+					jewbelTexture.loadFromFile(Paths.get("Resources/greenJewel.png"));
+					break;
+				case ORANGE:
+					jewbelTexture.loadFromFile(Paths.get("Resources/orangeJewel.png"));
 					break;
 			}
 
