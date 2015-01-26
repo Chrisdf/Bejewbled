@@ -23,6 +23,8 @@ public class Jewbel implements Drawable {
 	public enum Color {
 		BLUE, PURPLE, RED, YELLOW
 	};
+	
+	private int gameBoardSize;
 
 	private Color assignedColor;
 
@@ -32,16 +34,12 @@ public class Jewbel implements Drawable {
 
 	private AnimatedSprite jewbelSprite;
 
-	private boolean deleteFromBoard;
-
-	//private Font freeSans = new Font();
-
-	//private Text indexNumber;
-
 	public boolean passedBy = false;
 
-	public Jewbel(Vector2i gameBoardPosition) {
+	public Jewbel(Vector2i gameBoardPosition, int gameBoardSize) {
 
+		this.gameBoardSize = gameBoardSize;
+		
 		int randomColor = (int) (Math.random() * 4 + 1);
 
 		switch (randomColor)
@@ -60,24 +58,14 @@ public class Jewbel implements Drawable {
 				break;
 		}
 
-		/**
-		
-		**/
-
-		deleteFromBoard = false;
 		boardPosition = gameBoardPosition;
 		initSprite();
 
-		/**
-		indexNumber = new Text("" + boardPosition.x + "," + boardPosition.y, freeSans, 20);
-		indexNumber.setColor(org.jsfml.graphics.Color.BLACK);
-		indexNumber.setStyle(Text.BOLD);
-		**/
 	}
 
-	public Jewbel(Vector2i gameBoardPosition, Color jewbelColor) {
+	public Jewbel(Vector2i gameBoardPosition, Color jewbelColor, int gameBoardSize) {
 
-		this(gameBoardPosition);
+		this(gameBoardPosition, gameBoardSize);
 		assignedColor = jewbelColor;
 	}
 
@@ -102,7 +90,7 @@ public class Jewbel implements Drawable {
 
 	public Vector2i getBelowJewbel() {
 
-		if (boardPosition.y == 7)
+		if (boardPosition.y == gameBoardSize - 1)
 			return new Vector2i(boardPosition.x, -1);
 		else
 			return new Vector2i(boardPosition.x, boardPosition.y + 1);
@@ -118,7 +106,7 @@ public class Jewbel implements Drawable {
 
 	public Vector2i getRightJewbel() {
 
-		if (boardPosition.x == 7)
+		if (boardPosition.x == gameBoardSize - 1)
 			return new Vector2i( -1, boardPosition.y);
 		else
 			return new Vector2i(boardPosition.x + 1, boardPosition.y);
@@ -128,17 +116,11 @@ public class Jewbel implements Drawable {
 
 		jewbelSprite.slideToPosition(
 				Vector2f.add(tilePosition, new Vector2f(jewbelTexture.getSize().x / 8, jewbelTexture.getSize().y / 8)), 45f);
-
-		/**indexNumber.setPosition(jewbelSprite.getPosition());**/
 	}
 
 	public void setPosition(Vector2f jewbelPosition) {
 
 		jewbelSprite.slideToPosition(jewbelPosition, 45f);
-		/**indexNumber = new Text("" + boardPosition.x + "," + boardPosition.y, freeSans, 20);
-		indexNumber.setColor(org.jsfml.graphics.Color.BLACK);
-		indexNumber.setStyle(Text.BOLD);
-		indexNumber.setPosition(jewbelSprite.getPosition());**/
 	}
 
 	public Vector2i getBoardIndex() {

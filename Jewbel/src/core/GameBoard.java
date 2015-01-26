@@ -58,11 +58,11 @@ public class GameBoard implements Drawable {
 				gameBoardSize[i][d].setPosition(boundingBox.getPosition());
 				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(),
 						new Vector2f(i * 64, d * 64)));
-				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
-				
-				while(checkForRedundantMatches(jewbelsOnScreen[i][d]))
-					jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
-				
+				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
+
+				while (checkForRedundantMatches(jewbelsOnScreen[i][d]))
+					jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
+
 				jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
 				jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
 			}
@@ -70,32 +70,35 @@ public class GameBoard implements Drawable {
 
 	public void update() {
 
-		applyGravity();
+
 
 		for (Jewbel[] howdy : jewbelsOnScreen)
 			for (Jewbel selectedJewbel : howdy)
 				if (selectedJewbel != null)
 					selectedJewbel.update();
-		
-		if(!hasAnimatedJewbel())
+
+		if ( !hasAnimatedJewbel())
 			for (Jewbel[] howdy : jewbelsOnScreen)
 				for (Jewbel selectedJewbel : howdy)
-					if(selectedJewbel != null)
+					if (selectedJewbel != null)
 						checkForMatches(selectedJewbel);
-		
-		if(!hasAnimatedJewbel())
-			for (int i = 0; i< jewbelsOnScreen.length; i++)
-				for (int d = 0; d< jewbelsOnScreen[i].length; d++)
-					if(jewbelsOnScreen[i][d] == null)
+
+		applyGravity();
+
+		if ( !hasAnimatedJewbel())
+			for (int i = 0; i < jewbelsOnScreen.length; i++ )
+				for (int d = 0; d < jewbelsOnScreen[i].length; d++ )
+					if (jewbelsOnScreen[i][d] == null)
 					{
-						jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
-						
-						while(checkForRedundantMatches(jewbelsOnScreen[i][d]))
-							jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
-						
+						jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
+
+						while (checkForRedundantMatches(jewbelsOnScreen[i][d]))
+							jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
+
 						jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
 						jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
 					}
+
 	}
 
 
@@ -195,7 +198,7 @@ public class GameBoard implements Drawable {
 
 		selectionBox.setJewbelSelect(false);
 		selectionBox = new JewbelSelect();
-		
+
 		checkForMatches(firstJewbel);
 		checkForMatches(secondJewbel);
 	}
@@ -225,15 +228,15 @@ public class GameBoard implements Drawable {
 
 		return false;
 	}
-	
-	private boolean checkForRedundantMatches(Jewbel firstJewbel){
-		
+
+	private boolean checkForRedundantMatches(Jewbel firstJewbel) {
+
 		int totalMatchingHorizontally = checkForMatchesHorizontally(firstJewbel, firstJewbel.getBoardIndex(), false);
 		int totalMatchingVertically = checkForMatchesVertically(firstJewbel, firstJewbel.getBoardIndex(), false);
 
 		if (totalMatchingVertically >= 3 || totalMatchingHorizontally >= 3)
 			return true;
-		
+
 		else
 			return false;
 	}
@@ -373,11 +376,11 @@ public class GameBoard implements Drawable {
 			{
 				if (jewbelsOnScreen[i][d] != null)
 				{
-
 					int belowX = jewbelsOnScreen[i][d].getBelowJewbel().x;
 					int belowY = jewbelsOnScreen[i][d].getBelowJewbel().y;
 
-					if (jewbelsOnScreen[i][d].getBoardIndex().y < 7 && (jewbelsOnScreen[belowX][belowY] == null))
+					if (jewbelsOnScreen[i][d].getBoardIndex().y < jewbelsOnScreen.length - 1
+							&& (jewbelsOnScreen[belowX][belowY] == null))
 					{
 						jewbelsOnScreen[belowX][belowY] = jewbelsOnScreen[i][d];
 						jewbelsOnScreen[belowX][belowY].setBoardIndex(new Vector2i(belowX, belowY));
@@ -389,14 +392,14 @@ public class GameBoard implements Drawable {
 		}
 	}
 
-	public boolean hasAnimatedJewbel(){
-		
-		for(Jewbel[] horizontalRows: jewbelsOnScreen)
-			for(Jewbel selectedJewbel: horizontalRows)
-				if(selectedJewbel != null && selectedJewbel.getSprite().getIfAnimated() == true)
+	public boolean hasAnimatedJewbel() {
+
+		for (Jewbel[] horizontalRows : jewbelsOnScreen)
+			for (Jewbel selectedJewbel : horizontalRows)
+				if (selectedJewbel != null && selectedJewbel.getSprite().getIfAnimated() == true)
 					return true;
-		
+
 		return false;
 	}
-	
+
 }
