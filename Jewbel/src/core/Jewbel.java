@@ -164,6 +164,29 @@ public class Jewbel implements Drawable {
 					jewbelTexture.loadFromFile(Paths.get("Resources/orangeJewel.png"));
 					break;
 			}
+			
+			if(GameBoard.secret())
+				switch (assignedColor)
+				{
+					case RED:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/aaron.png"));
+						break;
+					case YELLOW:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/david.png"));
+						break;
+					case PURPLE:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/jason.png"));
+						break;
+					case BLUE:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/chris.png"));
+						break;
+					case GREEN:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/phong.png"));
+						break;
+					case ORANGE:
+						jewbelTexture.loadFromFile(Paths.get("Resources/secretResources/isaac.png"));
+						break;
+				}
 
 		}
 		catch (IOException e)

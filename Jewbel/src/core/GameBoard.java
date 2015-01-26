@@ -439,4 +439,10 @@ public class GameBoard implements Drawable {
 		return false;
 	}
 
+	
+	public static boolean secret(){
+		
+		return false;
+		//return true;
+	}
 }

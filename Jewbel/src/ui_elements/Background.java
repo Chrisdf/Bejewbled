@@ -10,6 +10,8 @@ import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
 import org.jsfml.system.Vector2f;
 
+import core.GameBoard;
+
 public class Background implements Drawable {
 
 	private RenderWindow renderWindow;
@@ -25,6 +27,9 @@ public class Background implements Drawable {
 		try
 		{
 			backgroundTexture.loadFromFile(Paths.get("Resources/background.jpg"));
+			
+			if(GameBoard.secret())
+				backgroundTexture.loadFromFile(Paths.get("Resources/secretResources/back.png"));
 		}
 		catch (Exception e)
 		{
