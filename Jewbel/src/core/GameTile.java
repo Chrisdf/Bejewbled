@@ -36,33 +36,33 @@ public class GameTile implements Drawable {
 
 
 	public void draw(RenderTarget target, RenderStates states) {
-		
+
 		sprite.draw(target, states);
 	}
 
 	public Vector2f getTilePosition() {
-		
+
 		return position;
 	}
 
 	public void setPosition(Vector2f pos) {
-		
+
 		position = pos;
 		sprite.setPosition(position);
 	}
-	
-	public void setOriginPosition(Vector2f origin){
-		
+
+	public void setOriginPosition(Vector2f origin) {
+
 		sprite.setOrigin(origin);
 	}
 
 	public Vector2i getTextureSize() {
-		
+
 		return texture.getSize();
 	}
 
 	public Sprite getSprite() {
-		
+
 		return sprite;
 	}
 }

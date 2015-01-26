@@ -16,12 +16,13 @@ public class Driver {
 	private static RenderWindow renderWindow;
 
 	private static Clock gameClock;
-	
+
 	private static FPS_Counter fpsCounter;
-	
+
 	private static Background background;
-	
+
 	private static GameTitle gameTitle;
+
 
 	public static void main(String args[]) {
 		gameSetup();
@@ -38,17 +39,35 @@ public class Driver {
 		gameBoard = new GameBoard(renderWindow);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
-		
+
+		final float UPDATES_PER_SECOND = 1 / 20f; //Seconds between each update
+		float lag = 0f; //How far the game is behind real time
+
+
 		while (renderWindow.isOpen())
 		{
-			update();
+			//float elapsed = gameClock.getElapsedTime().asSeconds();
+			//lag += elapsed;
+
 			handleInput();
+
+			/* Update until the game is back up with real time*/
+			//while (lag >= UPDATES_PER_SECOND)
+			//{
+			update();
+			//lag -= UPDATES_PER_SECOND; //Decrease amount of lag time behind real time
+			//}
+
+			fpsCounter.calcFPS();
+
 			drawWindow();
 		}
 	}
 
 	public static void update() {
-		fpsCounter.calcFPS();
+
+		gameBoard.update();
+
 	}
 
 	public static void handleInput() {
