@@ -31,10 +31,12 @@ public class Jewbel implements Drawable {
 	private Texture jewbelTexture;
 
 	private AnimatedSprite jewbelSprite;
-	
-	private Font freeSans = new Font();
-	
-	private Text indexNumber;
+
+	private boolean deleteFromBoard;
+
+	//private Font freeSans = new Font();
+
+	//private Text indexNumber;
 
 	public boolean passedBy = false;
 
@@ -57,14 +59,15 @@ public class Jewbel implements Drawable {
 				assignedColor = Color.BLUE;
 				break;
 		}
-		
+
 		/**
 		
 		**/
 
+		deleteFromBoard = false;
 		boardPosition = gameBoardPosition;
 		initSprite();
-		
+
 		/**
 		indexNumber = new Text("" + boardPosition.x + "," + boardPosition.y, freeSans, 20);
 		indexNumber.setColor(org.jsfml.graphics.Color.BLACK);
@@ -123,15 +126,15 @@ public class Jewbel implements Drawable {
 
 	public void setCenterTilePosition(Vector2f tilePosition) {
 
-		jewbelSprite.setPosition(Vector2f.add(tilePosition,
-				new Vector2f(jewbelTexture.getSize().x / 8, jewbelTexture.getSize().y / 8)));
-		
+		jewbelSprite.slideToPosition(
+				Vector2f.add(tilePosition, new Vector2f(jewbelTexture.getSize().x / 8, jewbelTexture.getSize().y / 8)), 45f);
+
 		/**indexNumber.setPosition(jewbelSprite.getPosition());**/
 	}
 
 	public void setPosition(Vector2f jewbelPosition) {
 
-		jewbelSprite.slideToPosition(jewbelPosition, 100f);
+		jewbelSprite.slideToPosition(jewbelPosition, 45f);
 		/**indexNumber = new Text("" + boardPosition.x + "," + boardPosition.y, freeSans, 20);
 		indexNumber.setColor(org.jsfml.graphics.Color.BLACK);
 		indexNumber.setStyle(Text.BOLD);
@@ -148,7 +151,7 @@ public class Jewbel implements Drawable {
 		boardPosition = jewbelIndex;
 	}
 
-	public void initSprite() {
+	private void initSprite() {
 		jewbelTexture = new Texture();
 		try
 		{
@@ -176,7 +179,7 @@ public class Jewbel implements Drawable {
 		jewbelSprite = new AnimatedSprite(jewbelTexture);
 	}
 
-	public Sprite getSprite() {
+	public AnimatedSprite getSprite() {
 
 		return jewbelSprite;
 	}
@@ -185,9 +188,9 @@ public class Jewbel implements Drawable {
 
 		return assignedColor;
 	}
-	
+
 	public void update() {
-		
+
 		jewbelSprite.animate();
 	}
 

@@ -29,16 +29,19 @@ public class GameBoard implements Drawable {
 
 	public GameBoard(RenderWindow window) {
 
+		//Instantiate misc. variables
 		gameBoardSize = new GameTile[8][8];
 		jewbelsOnScreen = new Jewbel[gameBoardSize.length][gameBoardSize.length];
 		renderWindow = window;
 		selectionBox = new JewbelSelect();
 		boundingBox = new RectangleShape();
 
+		//Instantiate all the tiles on the game board
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
 				gameBoardSize[i][d] = new GameTile();
 
+		//Sets the bounding box of the tiles to the center of the screen
 		Vector2i boundingBoxSize = Vector2i.mul(gameBoardSize[0][0].getTextureSize(), gameBoardSize.length);
 		boundingBox.setSize(new Vector2f(boundingBoxSize));
 		Vector2f renderWindowCenter = new Vector2f(renderWindow.getSize().x / 2, renderWindow.getSize().y / 1.5f);
@@ -48,6 +51,7 @@ public class GameBoard implements Drawable {
 		boundingBox.setPosition(boundingBoxPosition);
 		boundingBox.setFillColor(org.jsfml.graphics.Color.TRANSPARENT);
 
+		//Instantiate initial jewbels and set tile positions
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
 			{
@@ -55,35 +59,43 @@ public class GameBoard implements Drawable {
 				gameBoardSize[i][d].setPosition(Vector2f.add(gameBoardSize[i][d].getTilePosition(),
 						new Vector2f(i * 64, d * 64)));
 				jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d));
+				
+				while(checkForRedundantMatches(jewbelsOnScreen[i][d]))
+					jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
+				
+				jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
 				jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
 			}
 	}
 
 	public void update() {
 
-		for (int i = jewbelsOnScreen.length - 1; i >= 0; i-- )
-			for (int d = 0; d < jewbelsOnScreen[i].length; d++ )
-			{
-				if (jewbelsOnScreen[i][d] != null)
-				{
+		applyGravity();
 
-					int belowX = jewbelsOnScreen[i][d].getBelowJewbel().x;
-					int belowY = jewbelsOnScreen[i][d].getBelowJewbel().y;
-
-					if (jewbelsOnScreen[i][d].getBoardIndex().y < 7 && (jewbelsOnScreen[belowX][belowY] == null))
-					{
-						jewbelsOnScreen[belowX][belowY] = jewbelsOnScreen[i][d];
-						jewbelsOnScreen[belowX][belowY].setBoardIndex(new Vector2i(belowX, belowY));
-						jewbelsOnScreen[belowX][belowY].setCenterTilePosition(gameBoardSize[belowX][belowY].getTilePosition());
-						jewbelsOnScreen[i][d] = null;
-					}
-				}
-			}
-		
-		for(Jewbel[] howdy: jewbelsOnScreen)
-			for(Jewbel selectedJewbel: howdy)
-				if(selectedJewbel != null)
+		for (Jewbel[] howdy : jewbelsOnScreen)
+			for (Jewbel selectedJewbel : howdy)
+				if (selectedJewbel != null)
 					selectedJewbel.update();
+		
+		if(!hasAnimatedJewbel())
+			for (Jewbel[] howdy : jewbelsOnScreen)
+				for (Jewbel selectedJewbel : howdy)
+					if(selectedJewbel != null)
+						checkForMatches(selectedJewbel);
+		
+		if(!hasAnimatedJewbel())
+			for (int i = 0; i< jewbelsOnScreen.length; i++)
+				for (int d = 0; d< jewbelsOnScreen[i].length; d++)
+					if(jewbelsOnScreen[i][d] == null)
+					{
+						jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
+						
+						while(checkForRedundantMatches(jewbelsOnScreen[i][d]))
+							jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i,d));
+						
+						jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
+						jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
+					}
 	}
 
 
@@ -149,7 +161,7 @@ public class GameBoard implements Drawable {
 			}
 	}
 
-	public boolean mouseOnGameTile(GameTile gameTile, Vector2i mousePosition) {
+	private boolean mouseOnGameTile(GameTile gameTile, Vector2i mousePosition) {
 
 		if (mousePosition.x >= gameTile.getSprite().getPosition().x
 				&& mousePosition.x <= gameTile.getSprite().getPosition().x + gameTile.getTextureSize().x)
@@ -161,10 +173,17 @@ public class GameBoard implements Drawable {
 
 	}
 
-	public void swapJewbels(Jewbel firstJewbel, Jewbel secondJewbel, int jewbelBoardPositionX, int jewbelBoardPositionY) {
+	private void swapJewbels(Jewbel firstJewbel, Jewbel secondJewbel, int jewbelBoardPositionX, int jewbelBoardPositionY) {
+
 
 		Vector2f firstJewbelPosition = firstJewbel.getSprite().getPosition();
 		Vector2f secondJewbelPosition = secondJewbel.getSprite().getPosition();
+
+		if (firstJewbel.getSprite().getIfAnimated())
+			firstJewbelPosition = firstJewbel.getSprite().getFinalPosition();
+
+		if (secondJewbel.getSprite().getIfAnimated())
+			secondJewbelPosition = secondJewbel.getSprite().getFinalPosition();
 
 		Vector2i firstJewbelBoardIndex = firstJewbel.getBoardIndex();
 		firstJewbel.setBoardIndex(secondJewbel.getBoardIndex());
@@ -176,17 +195,17 @@ public class GameBoard implements Drawable {
 
 		selectionBox.setJewbelSelect(false);
 		selectionBox = new JewbelSelect();
-
+		
 		checkForMatches(firstJewbel);
 		checkForMatches(secondJewbel);
 	}
 
-	public void checkForMatches(Jewbel firstJewbel) {
+	private boolean checkForMatches(Jewbel firstJewbel) {
 
 		/**
 		 * This method recursively runs through both the horizontal matching and vertical matching methods. If
 		 * either of the methods return that there are three or more jewels that are the same color as the
-		 * original jewel then this method recursively reruns those methods with a true boolean, which will
+		 * original jewel then this method recursively reruns those methods with a boolean marked true, which will
 		 * allow modification of the jewels after finding matches
 		 **/
 
@@ -200,10 +219,26 @@ public class GameBoard implements Drawable {
 
 			if (totalMatchingVertically > totalMatchingHorizontally)
 				checkForMatchesVertically(firstJewbel, firstJewbel.getBoardIndex(), true);
+
+			return true;
 		}
+
+		return false;
+	}
+	
+	private boolean checkForRedundantMatches(Jewbel firstJewbel){
+		
+		int totalMatchingHorizontally = checkForMatchesHorizontally(firstJewbel, firstJewbel.getBoardIndex(), false);
+		int totalMatchingVertically = checkForMatchesVertically(firstJewbel, firstJewbel.getBoardIndex(), false);
+
+		if (totalMatchingVertically >= 3 || totalMatchingHorizontally >= 3)
+			return true;
+		
+		else
+			return false;
 	}
 
-	public int checkForMatchesHorizontally(Jewbel firstJewbel, Vector2i jewbelIndex, boolean hasMatch) {
+	private int checkForMatchesHorizontally(Jewbel firstJewbel, Vector2i jewbelIndex, boolean hasMatch) {
 
 		Jewbel oneToCheck = null;
 
@@ -236,6 +271,7 @@ public class GameBoard implements Drawable {
 
 
 					//CODE THAT RUNS WHEN A MATCH IS TRUE HORIZONTALLY
+					//jewbelsToDelete.add(jewbelsOnScreen[boardPositionX][boardPositionY]);
 					jewbelsOnScreen[boardPositionX][boardPositionY] = null;
 
 
@@ -266,7 +302,7 @@ public class GameBoard implements Drawable {
 		return numMatching;
 	}
 
-	public int checkForMatchesVertically(Jewbel firstJewbel, Vector2i jewbelIndex, boolean hasMatch) {
+	private int checkForMatchesVertically(Jewbel firstJewbel, Vector2i jewbelIndex, boolean hasMatch) {
 
 		Jewbel oneToCheck = null;
 
@@ -329,4 +365,38 @@ public class GameBoard implements Drawable {
 		return numMatching;
 	}
 
+	public void applyGravity() {
+
+		for (int i = jewbelsOnScreen.length - 1; i >= 0; i-- )
+		{
+			for (int d = 0; d < jewbelsOnScreen[i].length; d++ )
+			{
+				if (jewbelsOnScreen[i][d] != null)
+				{
+
+					int belowX = jewbelsOnScreen[i][d].getBelowJewbel().x;
+					int belowY = jewbelsOnScreen[i][d].getBelowJewbel().y;
+
+					if (jewbelsOnScreen[i][d].getBoardIndex().y < 7 && (jewbelsOnScreen[belowX][belowY] == null))
+					{
+						jewbelsOnScreen[belowX][belowY] = jewbelsOnScreen[i][d];
+						jewbelsOnScreen[belowX][belowY].setBoardIndex(new Vector2i(belowX, belowY));
+						jewbelsOnScreen[belowX][belowY].setCenterTilePosition(gameBoardSize[belowX][belowY].getTilePosition());
+						jewbelsOnScreen[i][d] = null;
+					}
+				}
+			}
+		}
+	}
+
+	public boolean hasAnimatedJewbel(){
+		
+		for(Jewbel[] horizontalRows: jewbelsOnScreen)
+			for(Jewbel selectedJewbel: horizontalRows)
+				if(selectedJewbel != null && selectedJewbel.getSprite().getIfAnimated() == true)
+					return true;
+		
+		return false;
+	}
+	
 }

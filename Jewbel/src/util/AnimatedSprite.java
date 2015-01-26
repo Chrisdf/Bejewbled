@@ -76,7 +76,7 @@ public class AnimatedSprite extends Sprite {
 		{
 			if (rateOfChangeOfPosition != null)
 			{
-				if (super.getPosition() == targetPosition)
+				if (isEqualHorizontally(super.getPosition()) && isEqualVertically(super.getPosition()))
 					rateOfChangeOfPosition = null;
 
 				else
@@ -85,8 +85,9 @@ public class AnimatedSprite extends Sprite {
 
 			if (rateOfChangeOfScale != null)
 			{
-				if (super.getScale() == targetScale)
-					rateOfChangeOfScale = null;
+				if (Math.round(super.getScale().x * 100) == Math.round(targetScale.x * 100))
+					if (Math.round(super.getScale().y * 100) == Math.round(targetScale.y * 100))
+						rateOfChangeOfScale = null;
 
 				else
 					super.setScale(Vector2f.add(super.getScale(), rateOfChangeOfScale));
@@ -94,7 +95,7 @@ public class AnimatedSprite extends Sprite {
 
 			if (rateOfChangeOfRotation != 0.f)
 			{
-				if (super.getRotation() == targetRotationDegrees)
+				if (Math.round(super.getRotation()) == Math.round(targetRotationDegrees))
 					rateOfChangeOfRotation = 0.f;
 
 				else
@@ -105,5 +106,26 @@ public class AnimatedSprite extends Sprite {
 		if (rateOfChangeOfPosition == null && rateOfChangeOfScale == null && rateOfChangeOfRotation == 0.f)
 			setAnimated(false);
 	}
+	
+	private boolean isEqualHorizontally(Vector2f currentLocation){
+		
+		if(Math.round(currentLocation.x) == Math.round(targetPosition.x))
+			return true;
+		else
+			return false;
+	}
+	
+	private boolean isEqualVertically(Vector2f currentLocation){
+		
+		if(Math.round(currentLocation.y) == Math.round(targetPosition.y))
+			return true;
+		else
+			return false;
+	}
 
+	public Vector2f getFinalPosition(){
+		
+		return targetPosition;
+	}
+	
 }

@@ -46,17 +46,17 @@ public class Driver {
 
 		while (renderWindow.isOpen())
 		{
-			float elapsed = gameClock.getElapsedTime().asSeconds();
-			lag += elapsed;
+			//float elapsed = gameClock.getElapsedTime().asSeconds();
+			//lag += elapsed;
 
 			handleInput();
 
 			/* Update until the game is back up with real time*/
-			while (lag >= UPDATES_PER_SECOND)
-			{
-				update();
-				lag -= UPDATES_PER_SECOND; //Decrease amount of lag time behind real time
-			}
+			//while (lag >= UPDATES_PER_SECOND)
+			//{
+			update();
+			//lag -= UPDATES_PER_SECOND; //Decrease amount of lag time behind real time
+			//}
 
 			fpsCounter.calcFPS();
 
