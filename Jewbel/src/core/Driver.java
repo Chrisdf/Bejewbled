@@ -41,10 +41,6 @@ public class Driver {
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
 
-		final float UPDATES_PER_SECOND = 1 / 20f; //Seconds between each update
-		float lag = 0f; //How far the game is behind real time
-
-
 		while (renderWindow.isOpen())
 		{
 			handleInput();

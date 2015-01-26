@@ -2,6 +2,8 @@ package ui_elements;
 
 import java.nio.file.Paths;
 
+import org.jsfml.audio.Sound;
+import org.jsfml.audio.SoundBuffer;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderStates;
@@ -19,12 +21,16 @@ public class ExplosionEffect implements Drawable{
 	
 	private Sprite explosionSprite;
 	
+	private SoundBuffer explosionNoise;
+	
 	public ExplosionEffect(Vector2f initialPosition){
 		
 		explosionTexture = new Texture();
+		explosionNoise = new SoundBuffer();
 		
 		try
-		{
+		{	
+			explosionNoise.loadFromFile(Paths.get("Resources/explosionNoise.wav"));
 			explosionTexture.loadFromFile(Paths.get("Resources/explosionSpriteSheet.png"));
 		}
 		catch(Exception e)
@@ -32,6 +38,9 @@ public class ExplosionEffect implements Drawable{
 			e.printStackTrace();
 		}
 		
+		Sound explode = new Sound(explosionNoise);
+		explode.setVolume(0.9f);
+		explode.play();
 		explosionSprite = new Sprite(explosionTexture);
 		explosionSprite.setTextureRect(new IntRect(0, 0, 64, 64));
 		explosionSprite.setPosition(initialPosition);
