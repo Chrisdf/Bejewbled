@@ -12,6 +12,7 @@ import org.jsfml.system.Vector2i;
 import org.jsfml.window.Window;
 
 import core.Jewbel.Color;
+import ui_elements.ExplosionEffect;
 import ui_elements.JewbelSelect;
 
 
@@ -27,6 +28,10 @@ public class GameBoard implements Drawable {
 
 	private JewbelSelect selectionBox;
 
+	private ArrayList<Jewbel> checkQueue;
+
+	private ArrayList<ExplosionEffect> explosionArray;
+
 	public GameBoard(RenderWindow window) {
 
 		//Instantiate misc. variables
@@ -35,6 +40,8 @@ public class GameBoard implements Drawable {
 		renderWindow = window;
 		selectionBox = new JewbelSelect();
 		boundingBox = new RectangleShape();
+		checkQueue = new ArrayList<Jewbel>();
+		explosionArray = new ArrayList<ExplosionEffect>();
 
 		//Instantiate all the tiles on the game board
 		for (int i = 0; i < gameBoardSize.length; i++ )
@@ -70,7 +77,18 @@ public class GameBoard implements Drawable {
 
 	public void update() {
 
+		for (ExplosionEffect explosion : explosionArray)
+			explosion.update();
 
+		for (int i = 0; i < checkQueue.size(); i++ )
+		{
+			if ( !checkQueue.get(i).getSprite().getIfAnimated())
+			{
+				checkForMatches(checkQueue.get(i));
+				checkQueue.remove(i);
+				i-- ;
+			}
+		}
 
 		for (Jewbel[] howdy : jewbelsOnScreen)
 			for (Jewbel selectedJewbel : howdy)
@@ -117,6 +135,18 @@ public class GameBoard implements Drawable {
 				if (verticalJewbels != null)
 					verticalJewbels.draw(target, states);
 
+		for (int i = 0; i < explosionArray.size(); i++ )
+			if (explosionArray.get(i) != null)
+			{
+				if (explosionArray.get(i).hasAnimationFinished())
+				{
+					explosionArray.remove(i);
+					i-- ;
+				}
+				else
+					explosionArray.get(i).draw(target, states);
+			}
+
 		boundingBox.draw(target, states);
 	}
 
@@ -126,38 +156,41 @@ public class GameBoard implements Drawable {
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
 			{
-				if ( !selectionBox.getIfJewbelSelected())
+				if ( !hasAnimatedJewbel())
 				{
-					//First click on game board if a jewbel has not been selected already
-					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
+					if ( !selectionBox.getIfJewbelSelected())
 					{
-						Vector2f jewbelPosition = gameBoardSize[i][d].getTilePosition();
-						if (jewbelsOnScreen[i][d] != null)
+						//First click on game board if a jewbel has not been selected already
+						if (mouseOnGameTile(gameBoardSize[i][d], mousePosition))
 						{
-							selectionBox = new JewbelSelect(jewbelPosition, new Vector2i(i, d));
-							selectionBox.setJewbelSelect(true);
+							Vector2f jewbelPosition = gameBoardSize[i][d].getTilePosition();
+							if (jewbelsOnScreen[i][d] != null)
+							{
+								selectionBox = new JewbelSelect(jewbelPosition, new Vector2i(i, d));
+								selectionBox.setJewbelSelect(true);
+							}
 						}
 					}
-				}
-				else if (selectionBox.getIfJewbelSelected())
-				{
-					//The two selected jewbels swap
-					if (mouseOnGameTile(gameBoardSize[i][d], mousePosition) && jewbelsOnScreen[i][d] != null)
+					else if (selectionBox.getIfJewbelSelected())
 					{
-						Jewbel firstJewbel =
-								jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
-						Jewbel secondJewbel = jewbelsOnScreen[i][d];
-
-						if (firstJewbel.getIfAdjacent(secondJewbel))
+						//The two selected jewbels swap
+						if (mouseOnGameTile(gameBoardSize[i][d], mousePosition) && jewbelsOnScreen[i][d] != null)
 						{
-							swapJewbels(firstJewbel, secondJewbel, i, d);
-						}
+							Jewbel firstJewbel =
+									jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
+							Jewbel secondJewbel = jewbelsOnScreen[i][d];
 
-						else if (firstJewbel.equals(secondJewbel))
-						{
-							//Deselects
-							selectionBox.setJewbelSelect(false);
-							selectionBox = new JewbelSelect();
+							if (firstJewbel.getIfAdjacent(secondJewbel))
+							{
+								swapJewbels(firstJewbel, secondJewbel, i, d);
+							}
+
+							else if (firstJewbel.equals(secondJewbel))
+							{
+								//Deselects
+								selectionBox.setJewbelSelect(false);
+								selectionBox = new JewbelSelect();
+							}
 						}
 					}
 				}
@@ -199,8 +232,8 @@ public class GameBoard implements Drawable {
 		selectionBox.setJewbelSelect(false);
 		selectionBox = new JewbelSelect();
 
-		checkForMatches(firstJewbel);
-		checkForMatches(secondJewbel);
+		checkQueue.add(firstJewbel);
+		checkQueue.add(secondJewbel);
 	}
 
 	private boolean checkForMatches(Jewbel firstJewbel) {
@@ -275,6 +308,8 @@ public class GameBoard implements Drawable {
 
 					//CODE THAT RUNS WHEN A MATCH IS TRUE HORIZONTALLY
 					//jewbelsToDelete.add(jewbelsOnScreen[boardPositionX][boardPositionY]);
+					Vector2f jewbelPosition = jewbelsOnScreen[boardPositionX][boardPositionY].getSprite().getFinalPosition();
+					explosionArray.add(new ExplosionEffect(jewbelPosition));
 					jewbelsOnScreen[boardPositionX][boardPositionY] = null;
 
 
@@ -338,6 +373,8 @@ public class GameBoard implements Drawable {
 
 
 					//CODE THAT RUNS WHEN A MATCH IS TRUE VERTICALLY
+					Vector2f jewbelPosition = jewbelsOnScreen[boardPositionX][boardPositionY].getSprite().getFinalPosition();
+					explosionArray.add(new ExplosionEffect(jewbelPosition));
 					jewbelsOnScreen[boardPositionX][boardPositionY] = null;
 
 

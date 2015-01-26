@@ -1,6 +1,7 @@
 package core;
 
 import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.View;
 import org.jsfml.system.Clock;
 import org.jsfml.window.VideoMode;
 import org.jsfml.window.event.Event;
@@ -29,7 +30,7 @@ public class Driver {
 	}
 
 	public static void gameSetup() {
-
+		
 		renderWindow = new RenderWindow();
 		renderWindow.create(VideoMode.getDesktopMode(), "Bejewbled");
 		renderWindow.setFramerateLimit(60);
@@ -46,17 +47,9 @@ public class Driver {
 
 		while (renderWindow.isOpen())
 		{
-			//float elapsed = gameClock.getElapsedTime().asSeconds();
-			//lag += elapsed;
-
 			handleInput();
 
-			/* Update until the game is back up with real time*/
-			//while (lag >= UPDATES_PER_SECOND)
-			//{
 			update();
-			//lag -= UPDATES_PER_SECOND; //Decrease amount of lag time behind real time
-			//}
 
 			fpsCounter.calcFPS();
 
