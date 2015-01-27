@@ -9,6 +9,7 @@ import org.jsfml.window.event.Event;
 import ui_elements.Background;
 import ui_elements.FPS_Counter;
 import ui_elements.GameTitle;
+import ui_elements.ScoreCounter;
 
 public class Driver {
 
@@ -23,6 +24,8 @@ public class Driver {
 	private static Background background;
 
 	private static GameTitle gameTitle;
+	
+	private static ScoreCounter gameScore;
 
 
 	public static void main(String args[]) {
@@ -40,6 +43,7 @@ public class Driver {
 		gameBoard = new GameBoard(renderWindow);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
+		gameScore = new ScoreCounter();
 
 		while (renderWindow.isOpen())
 		{
@@ -75,6 +79,7 @@ public class Driver {
 		renderWindow.draw(background);
 		renderWindow.draw(gameTitle);
 		renderWindow.draw(gameBoard);
+		renderWindow.draw(gameScore);
 		renderWindow.draw(fpsCounter);
 		renderWindow.display();
 	}
