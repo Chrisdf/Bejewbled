@@ -41,9 +41,9 @@ public class Driver {
 		background = new Background(renderWindow);
 		gameTitle = new GameTitle(renderWindow);
 		gameBoard = new GameBoard(renderWindow);
+		gameScore = new ScoreCounter(renderWindow);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
-		gameScore = new ScoreCounter();
 
 		while (renderWindow.isOpen())
 		{

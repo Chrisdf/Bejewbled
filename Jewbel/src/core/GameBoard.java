@@ -80,13 +80,13 @@ public class GameBoard implements Drawable {
 		for (ExplosionEffect explosion : explosionArray)
 			explosion.update();
 
-		for (int i = 0; i < checkQueue.size(); i++ )
+		for(int i = 0; i < checkQueue.size(); i++)
 		{
-			if ( !checkQueue.get(i).getSprite().getIfAnimated())
+			if(!checkQueue.get(i).getSprite().getIfAnimated())
 			{
 				checkForMatches(checkQueue.get(i));
 				checkQueue.remove(i);
-				i-- ;
+				i--;
 			}
 		}
 
