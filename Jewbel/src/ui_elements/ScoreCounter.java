@@ -26,6 +26,8 @@ public class ScoreCounter implements Drawable {
 	
 	private RectangleShape test;
 	
+	private float borderSize;
+	
 	public ScoreCounter(RenderWindow renderWindow){
 		
 		window = renderWindow;
@@ -41,9 +43,11 @@ public class ScoreCounter implements Drawable {
 			e.printStackTrace();
 		}
 		
+		borderSize = 4f;
+		
 		Vector2f positioning = new Vector2f(window.getSize().x / 15, window.getSize().y / 8);
 		
-		displayedScore = new Text(totalScore + "", freeSans, 90);
+		displayedScore = new Text(totalScore + "", freeSans, 120);
 		displayedScore.setColor(Color.GREEN);
 		
 		Vector2f displaySize = new Vector2f(displayedScore.getLocalBounds().width, displayedScore.getLocalBounds().height);
@@ -51,18 +55,18 @@ public class ScoreCounter implements Drawable {
 		scoreBackground.setSize(displaySize);
 		scoreBackground.setFillColor(new Color(Color.CYAN, 150));
 		scoreBackground.setOutlineColor(Color.CYAN);
-		scoreBackground.setOutlineThickness(4f);
+		scoreBackground.setOutlineThickness(borderSize);
 		scoreBackground.setPosition(positioning);
 		
-		float centerXPosition = scoreBackground.getPosition().x + ((scoreBackground.getGlobalBounds().width - displayedScore.getLocalBounds().width) / 2);
-		float centerYPosition = scoreBackground.getPosition().y + ((scoreBackground.getGlobalBounds().height - displayedScore.getLocalBounds().height) / 2);
+		float centerXPosition = scoreBackground.getPosition().x + ((scoreBackground.getGlobalBounds().width - displayedScore.getLocalBounds().width) / 2) - borderSize;
+		float centerYPosition = scoreBackground.getPosition().y + ((scoreBackground.getGlobalBounds().height - displayedScore.getLocalBounds().height) / 2) - borderSize;
 		displayedScore.setPosition(centerXPosition, centerYPosition);
 		
 		
 		test = new RectangleShape();
-		//test.setPosition(displayedScore.getPosition());
-		test.setPosition(Vector2f.add(displayedScore.getPosition(), new Vector2f(displayedScore.getLocalBounds().width, displayedScore.getLocalBounds().height)));
-		test.setSize(new Vector2f(2,2));
+		test.setPosition(displayedScore.getPosition());
+		//test.setPosition(Vector2f.add(displayedScore.getPosition(), new Vector2f(displayedScore.getLocalBounds().width, displayedScore.getLocalBounds().height)));
+		test.setSize(new Vector2f(displayedScore.getLocalBounds().width, displayedScore.getLocalBounds().height));
 		test.setFillColor(Color.BLACK);
 	}
 
