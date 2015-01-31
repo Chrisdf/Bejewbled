@@ -40,8 +40,8 @@ public class Driver {
 
 		background = new Background(renderWindow);
 		gameTitle = new GameTitle(renderWindow);
-		gameBoard = new GameBoard(renderWindow);
 		gameScore = new ScoreCounter(renderWindow);
+		gameBoard = new GameBoard(renderWindow, gameScore);
 		gameClock = new Clock();
 		fpsCounter = new FPS_Counter(gameClock);
 

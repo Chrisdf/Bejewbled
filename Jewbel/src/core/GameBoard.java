@@ -11,9 +11,10 @@ import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.Window;
 
-import core.Jewbel.Color;
 import ui_elements.ExplosionEffect;
 import ui_elements.JewbelSelect;
+import ui_elements.ScoreCounter;
+import core.Jewbel.Color;
 
 
 public class GameBoard implements Drawable {
@@ -31,8 +32,10 @@ public class GameBoard implements Drawable {
 	private ArrayList<Jewbel> checkQueue;
 
 	private ArrayList<ExplosionEffect> explosionArray;
+	
+	private ScoreCounter gameScore;
 
-	public GameBoard(RenderWindow window) {
+	public GameBoard(RenderWindow window, ScoreCounter scoreCounter) {
 
 		//Instantiate misc. variables
 		gameBoardSize = new GameTile[8][8];
@@ -42,7 +45,8 @@ public class GameBoard implements Drawable {
 		boundingBox = new RectangleShape();
 		checkQueue = new ArrayList<Jewbel>();
 		explosionArray = new ArrayList<ExplosionEffect>();
-
+		gameScore = scoreCounter;
+		
 		//Instantiate all the tiles on the game board
 		for (int i = 0; i < gameBoardSize.length; i++ )
 			for (int d = 0; d < gameBoardSize[i].length; d++ )
@@ -116,7 +120,9 @@ public class GameBoard implements Drawable {
 						jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
 						jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
 					}
-
+ 
+		gameScore.update();
+		
 	}
 
 
@@ -251,11 +257,17 @@ public class GameBoard implements Drawable {
 		if (totalMatchingVertically >= 3 || totalMatchingHorizontally >= 3)
 		{
 			if (totalMatchingHorizontally >= totalMatchingVertically)
+			{
 				checkForMatchesHorizontally(firstJewbel, firstJewbel.getBoardIndex(), true);
-
+				gameScore.add(totalMatchingHorizontally);
+			}
+				
 			if (totalMatchingVertically > totalMatchingHorizontally)
+			{
 				checkForMatchesVertically(firstJewbel, firstJewbel.getBoardIndex(), true);
-
+				gameScore.add(totalMatchingVertically);
+			}
+			
 			return true;
 		}
 
