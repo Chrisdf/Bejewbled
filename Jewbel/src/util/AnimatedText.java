@@ -1,23 +1,22 @@
 package util;
 
-import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
+import org.jsfml.graphics.ConstFont;
+import org.jsfml.graphics.Text;
 import org.jsfml.system.Vector2f;
 
+public class AnimatedText extends Text {
 
-public class AnimatedSprite extends Sprite {
-
-	private boolean animated = false;
-
-	private Vector2f rateOfChangeOfPosition = null;
-
-	private Vector2f targetPosition = null;
-
-	public AnimatedSprite() {}
+	public boolean animated;
 	
-	public AnimatedSprite(Texture texture){
+	public Vector2f rateOfChangeOfPosition;
+	
+	private Vector2f targetPosition;
+	
+	public AnimatedText() {}
+	
+	public AnimatedText(String string, ConstFont font, int fontSize){
 		
-		super(texture);
+		super(string, font, fontSize);
 	}
 
 	public void setAnimated(boolean ifAnimated) {
@@ -29,7 +28,7 @@ public class AnimatedSprite extends Sprite {
 
 		return animated;
 	}
-
+	
 	public void slideToPosition(Vector2f finalPosition, float animationSpeed) {
 
 		targetPosition = finalPosition;
@@ -38,7 +37,7 @@ public class AnimatedSprite extends Sprite {
 		Vector2f distanceBetweenPositions = Vector2f.sub(finalPosition, super.getPosition());
 		rateOfChangeOfPosition = Vector2f.div(distanceBetweenPositions, animationSpeed);
 	}
-
+	
 	public void animate() {
 
 		if (animated)
@@ -77,5 +76,4 @@ public class AnimatedSprite extends Sprite {
 		
 		return targetPosition;
 	}
-	
 }

@@ -51,14 +51,14 @@ public class Driver {
 
 			update();
 
-			fpsCounter.calcFPS();
-
 			drawWindow();
 		}
 	}
 
 	public static void update() {
 
+		fpsCounter.calcFPS();
+		
 		gameBoard.update();
 
 	}
