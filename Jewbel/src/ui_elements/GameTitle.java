@@ -38,6 +38,11 @@ public class GameTitle implements Drawable {
 		gameTitle.setOrigin(gameTitleBounds.width / 2, gameTitleBounds.height / 3);
 		gameTitle.setPosition(new Vector2f(renderWindow.getSize().x / 2, renderWindow.getSize().y / 20));
 	}
+	
+	public Sprite getTitleSprite(){
+		
+		return gameTitle;
+	}
 
 	public void draw(RenderTarget target, RenderStates states) {
 

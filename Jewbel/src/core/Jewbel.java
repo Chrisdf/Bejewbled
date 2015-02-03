@@ -23,7 +23,7 @@ public class Jewbel implements Drawable {
 	public enum Color {
 		BLUE, PURPLE, RED, YELLOW, ORANGE, GREEN
 	};
-	
+
 	private int gameBoardSize;
 
 	private Color assignedColor;
@@ -34,12 +34,16 @@ public class Jewbel implements Drawable {
 
 	private AnimatedSprite jewbelSprite;
 
+	private int swapMatchedOn;
+
 	public boolean passedBy = false;
 
 	public Jewbel(Vector2i gameBoardPosition, int gameBoardSize) {
 
+		swapMatchedOn = -1;
+
 		this.gameBoardSize = gameBoardSize;
-		
+
 		int randomColor = (int) (Math.random() * 6 + 1);
 
 		switch (randomColor)
@@ -164,8 +168,8 @@ public class Jewbel implements Drawable {
 					jewbelTexture.loadFromFile(Paths.get("Resources/orangeJewel.png"));
 					break;
 			}
-			
-			if(GameBoard.secret())
+
+			if (GameBoard.secret())
 				switch (assignedColor)
 				{
 					case RED:
