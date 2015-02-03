@@ -1,23 +1,22 @@
 package util;
 
-import org.jsfml.graphics.Sprite;
-import org.jsfml.graphics.Texture;
+import org.jsfml.graphics.ConstFont;
+import org.jsfml.graphics.Text;
 import org.jsfml.system.Vector2f;
 
+public class AnimatedText extends Text {
 
-public class AnimatedSprite extends Sprite {
+	public boolean animated;
 
-	private boolean animated = false;
+	public Vector2f rateOfChangeOfPosition;
 
-	private Vector2f rateOfChangeOfPosition = null;
+	private Vector2f targetPosition;
 
-	private Vector2f targetPosition = null;
+	public AnimatedText() {}
 
-	public AnimatedSprite() {}
-	
-	public AnimatedSprite(Texture texture){
-		
-		super(texture);
+	public AnimatedText(String string, ConstFont font, int fontSize) {
+
+		super(string, font, fontSize);
 	}
 
 	public void setAnimated(boolean ifAnimated) {
@@ -56,26 +55,25 @@ public class AnimatedSprite extends Sprite {
 		if (rateOfChangeOfPosition == null)
 			setAnimated(false);
 	}
-	
-	private boolean isEqualHorizontally(Vector2f currentLocation){
-		
-		if(Math.round(currentLocation.x) == Math.round(targetPosition.x))
-			return true;
-		else
-			return false;
-	}
-	
-	private boolean isEqualVertically(Vector2f currentLocation){
-		
-		if(Math.round(currentLocation.y) == Math.round(targetPosition.y))
+
+	private boolean isEqualHorizontally(Vector2f currentLocation) {
+
+		if (Math.round(currentLocation.x) == Math.round(targetPosition.x))
 			return true;
 		else
 			return false;
 	}
 
-	public Vector2f getFinalPosition(){
-		
+	private boolean isEqualVertically(Vector2f currentLocation) {
+
+		if (Math.round(currentLocation.y) == Math.round(targetPosition.y))
+			return true;
+		else
+			return false;
+	}
+
+	public Vector2f getFinalPosition() {
+
 		return targetPosition;
 	}
-	
 }

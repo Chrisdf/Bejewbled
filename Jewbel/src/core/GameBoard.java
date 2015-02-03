@@ -11,9 +11,11 @@ import org.jsfml.system.Vector2f;
 import org.jsfml.system.Vector2i;
 import org.jsfml.window.Window;
 
-import core.Jewbel.Color;
 import ui_elements.ExplosionEffect;
 import ui_elements.JewbelSelect;
+import ui_elements.ScoreCounter;
+import ui_elements.TurnsLeft;
+import core.Jewbel.Color;
 
 
 public class GameBoard implements Drawable {
@@ -32,16 +34,22 @@ public class GameBoard implements Drawable {
 
 	private ArrayList<ExplosionEffect> explosionArray;
 
-	public GameBoard(RenderWindow window) {
+	private ScoreCounter gameScore;
+	
+	private TurnsLeft turnsLeft;
+
+	public GameBoard(RenderWindow window, ScoreCounter scoreCounter, TurnsLeft turnCount) {
 
 		//Instantiate misc. variables
 		gameBoardSize = new GameTile[8][8];
+		turnsLeft = turnCount;
 		jewbelsOnScreen = new Jewbel[gameBoardSize.length][gameBoardSize.length];
 		renderWindow = window;
 		selectionBox = new JewbelSelect();
 		boundingBox = new RectangleShape();
 		checkQueue = new ArrayList<Jewbel>();
 		explosionArray = new ArrayList<ExplosionEffect>();
+		gameScore = scoreCounter;
 
 		//Instantiate all the tiles on the game board
 		for (int i = 0; i < gameBoardSize.length; i++ )
@@ -79,6 +87,8 @@ public class GameBoard implements Drawable {
 
 		for (ExplosionEffect explosion : explosionArray)
 			explosion.update();
+		
+		turnsLeft.update();
 
 		for (int i = 0; i < checkQueue.size(); i++ )
 		{
@@ -109,13 +119,11 @@ public class GameBoard implements Drawable {
 					if (jewbelsOnScreen[i][d] == null)
 					{
 						jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
-
-						while (checkForRedundantMatches(jewbelsOnScreen[i][d]))
-							jewbelsOnScreen[i][d] = new Jewbel(new Vector2i(i, d), gameBoardSize.length);
-
 						jewbelsOnScreen[i][d].getSprite().setPosition(new Vector2f(gameBoardSize[i][d].getTilePosition().x, -100));
 						jewbelsOnScreen[i][d].setCenterTilePosition(gameBoardSize[i][d].getTilePosition());
 					}
+
+		gameScore.update();
 
 	}
 
@@ -180,7 +188,7 @@ public class GameBoard implements Drawable {
 									jewbelsOnScreen[selectionBox.getSelectedJewbelIndex().x][selectionBox.getSelectedJewbelIndex().y];
 							Jewbel secondJewbel = jewbelsOnScreen[i][d];
 
-							if (firstJewbel.getIfAdjacent(secondJewbel))
+							if (firstJewbel.getIfAdjacent(secondJewbel) && turnsLeft.getTurnsLeft() > 0)
 							{
 								swapJewbels(firstJewbel, secondJewbel, i, d);
 							}
@@ -231,6 +239,8 @@ public class GameBoard implements Drawable {
 
 		selectionBox.setJewbelSelect(false);
 		selectionBox = new JewbelSelect();
+		
+		turnsLeft.decreaseTurnsLeft();
 
 		checkQueue.add(firstJewbel);
 		checkQueue.add(secondJewbel);
@@ -251,10 +261,16 @@ public class GameBoard implements Drawable {
 		if (totalMatchingVertically >= 3 || totalMatchingHorizontally >= 3)
 		{
 			if (totalMatchingHorizontally >= totalMatchingVertically)
+			{
 				checkForMatchesHorizontally(firstJewbel, firstJewbel.getBoardIndex(), true);
+				gameScore.add(totalMatchingHorizontally);
+			}
 
 			if (totalMatchingVertically > totalMatchingHorizontally)
+			{
 				checkForMatchesVertically(firstJewbel, firstJewbel.getBoardIndex(), true);
+				gameScore.add(totalMatchingVertically);
+			}
 
 			return true;
 		}
@@ -307,7 +323,6 @@ public class GameBoard implements Drawable {
 
 
 					//CODE THAT RUNS WHEN A MATCH IS TRUE HORIZONTALLY
-					//jewbelsToDelete.add(jewbelsOnScreen[boardPositionX][boardPositionY]);
 					Vector2f jewbelPosition = jewbelsOnScreen[boardPositionX][boardPositionY].getSprite().getFinalPosition();
 					explosionArray.add(new ExplosionEffect(jewbelPosition));
 					jewbelsOnScreen[boardPositionX][boardPositionY] = null;
@@ -439,9 +454,9 @@ public class GameBoard implements Drawable {
 		return false;
 	}
 
-	
-	public static boolean secret(){
-		
+
+	public static boolean secret() {
+
 		return false;
 		//return true;
 	}
